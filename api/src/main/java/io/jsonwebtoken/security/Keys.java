@@ -22,6 +22,7 @@ import io.jsonwebtoken.lang.Classes;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +37,7 @@ public final class Keys {
     private static final String MAC = "io.jsonwebtoken.impl.crypto.MacProvider";
     private static final String RSA = "io.jsonwebtoken.impl.crypto.RsaProvider";
     private static final String EC = "io.jsonwebtoken.impl.crypto.EllipticCurveProvider";
+    private static final String ED = "io.jsonwebtoken.impl.crypto.EdDSAProvider";
 
     private static final Class[] SIG_ARG_TYPES = new Class[]{SignatureAlgorithm.class};
 
@@ -140,6 +142,15 @@ public final class Keys {
         }
     }
 
+    public static PrivateKey privateKeyFor(SignatureAlgorithm alg) throws IllegalArgumentException {
+        Assert.notNull(alg, "SignatureAlgorithm cannot be null.");
+        if (alg == SignatureAlgorithm.ED25519) {
+            return Classes.invokeStatic(ED, "generatePrivateKey", SIG_ARG_TYPES, alg);
+        }
+        String msg = "The " + alg.name() + " algorithm does not support private key.";
+        throw new IllegalArgumentException(msg);
+    }
+
     /**
      * Returns a new {@link KeyPair} suitable for use with the specified asymmetric algorithm.
      *
@@ -223,6 +234,8 @@ public final class Keys {
             case ES384:
             case ES512:
                 return Classes.invokeStatic(EC, "generateKeyPair", SIG_ARG_TYPES, alg);
+            case ED25519:
+                return Classes.invokeStatic(ED, "generateKeyPair", SIG_ARG_TYPES, alg);
             default:
                 String msg = "The " + alg.name() + " algorithm does not support Key Pairs.";
                 throw new IllegalArgumentException(msg);
