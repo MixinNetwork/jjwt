@@ -551,6 +551,11 @@ class JwtsTest {
     }
 
     @Test
+    void testEd25519() {
+        testED(SignatureAlgorithm.ED25519)
+    }
+
+    @Test
     void testES256WithPrivateKeyValidation() {
         try {
             testEC(SignatureAlgorithm.ES256, true)
@@ -777,6 +782,23 @@ class JwtsTest {
         }
 
         def token = Jwts.parserBuilder().setSigningKey(key).build().parse(jwt)
+
+        assert token.header == [alg: alg.name()]
+        //noinspection GrEqualsBetweenInconvertibleTypes
+        assert token.body == claims
+    }
+
+    static void testED(SignatureAlgorithm alg) {
+
+        KeyPair pair = Keys.keyPairFor(alg)
+        PublicKey publicKey = pair.getPublic()
+        PrivateKey privateKey = pair.getPrivate()
+
+        def claims = [iss: 'joe', exp: later(), 'http://example.com/is_root': true]
+
+        String jwt = Jwts.builder().setClaims(claims).signWith(privateKey, alg).compact()
+
+        def token = Jwts.parserBuilder().setSigningKey(publicKey).build().parse(jwt)
 
         assert token.header == [alg: alg.name()]
         //noinspection GrEqualsBetweenInconvertibleTypes

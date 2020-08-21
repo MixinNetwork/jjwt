@@ -19,6 +19,7 @@ import io.jsonwebtoken.security.InvalidKeyException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.security.WeakKeyException;
+import net.i2p.crypto.eddsa.EdDSAKey;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -106,7 +107,10 @@ public enum SignatureAlgorithm {
      * Java 11 or later or a JCA provider like BouncyCastle to be in the runtime classpath.</b>  If on Java 10 or
      * earlier, BouncyCastle will be used automatically if found in the runtime classpath.
      */
-    PS512("PS512", "RSASSA-PSS using SHA-512 and MGF1 with SHA-512", "RSA", "RSASSA-PSS", false, 512, 2048);
+    PS512("PS512", "RSASSA-PSS using SHA-512 and MGF1 with SHA-512", "RSA", "RSASSA-PSS", false, 512, 2048),
+
+    ED25519("ED25519", "EdDSA using SHA-512 (SHA-2) and Curve25519", "EdDSA", "Ed25519", false, 512, 256);
+
 
     //purposefully ordered higher to lower:
     private static final List<SignatureAlgorithm> PREFERRED_HMAC_ALGS = Collections.unmodifiableList(Arrays.asList(
@@ -290,6 +294,10 @@ public enum SignatureAlgorithm {
         return familyName.equals("ECDSA");
     }
 
+    public boolean isEdDSA() {
+        return familyName.equals("EdDSA");
+    }
+
     /**
      * Returns the minimum key length in bits (not bytes) that may be used with this algorithm according to the
      * <a href="https://tools.ietf.org/html/rfc7518">JWT JWA Specification (RFC 7518)</a>.
@@ -387,7 +395,7 @@ public enum SignatureAlgorithm {
                 throw new WeakKeyException(msg);
             }
 
-        } else { //EC or RSA
+        } else { //EC or RSA or EdDSA
 
             if (signing) {
                 if (!(key instanceof PrivateKey)) {
@@ -416,6 +424,13 @@ public enum SignatureAlgorithm {
                         "https://tools.ietf.org/html/rfc7518#section-3.4 for more information.";
                     throw new WeakKeyException(msg);
                 }
+
+            } else if (isEdDSA()) {
+                if (!(key instanceof EdDSAKey)) {
+                    String msg = familyName + " " + keyType(signing) + " keys must be EdDSAKey instances.";
+                    throw new InvalidKeyException(msg);
+                }
+
 
             } else { //RSA
 
@@ -611,6 +626,10 @@ public enum SignatureAlgorithm {
                 "key is " + bitLength + " bits.  See https://tools.ietf.org/html/rfc7518#section-3.3 for more " +
                 "information.";
             throw new WeakKeyException(msg);
+        }
+
+        if (key instanceof EdDSAKey) {
+            return ED25519;
         }
 
         // if we've made it this far in the method, the key is an ECKey due to the instanceof assertions at the

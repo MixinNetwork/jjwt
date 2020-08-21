@@ -45,6 +45,8 @@ public class DefaultSignatureValidatorFactory implements SignatureValidatorFacto
             case ES384:
             case ES512:
                 return new EllipticCurveSignatureValidator(alg, key);
+            case ED25519:
+                return new EdDSASignatureValidator(alg, key);
             default:
                 throw new IllegalArgumentException("The '" + alg.name() + "' algorithm cannot be used for signing.");
         }
