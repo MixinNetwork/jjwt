@@ -70,7 +70,7 @@ public enum SignatureAlgorithm {
     /**
      * JWA algorithm name for {@code RSASSA-PKCS-v1_5 using SHA-512}
      */
-    RS512("RS512", "RSASSA-PKCS-v1_5 using SHA-512", "RSA", "SHA512withRSA", true, 512, 2048),
+    RS512("RS512", "RSASSA-PKCS-v1_5 using SHA-512", "RSA", "SHA512withRSA", true, 512, 1024),
 
     /**
      * JWA algorithm name for {@code ECDSA using P-256 and SHA-256}
