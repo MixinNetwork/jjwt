@@ -551,8 +551,8 @@ class JwtsTest {
     }
 
     @Test
-    void testEd25519() {
-        testED(SignatureAlgorithm.ED25519)
+    void testEdDSA() {
+        testED(SignatureAlgorithm.EdDSA)
     }
 
     @Test

@@ -13,8 +13,8 @@ import static org.junit.Assert.assertTrue
 class EdDSATest {
 
     @Test
-    void testEd25519SignVerify() {
-        SignatureAlgorithm alg = SignatureAlgorithm.ED25519
+    void testEdDSASignVerify() {
+        SignatureAlgorithm alg = SignatureAlgorithm.EdDSA
         byte[] target = Utils.hexToBytes("test message")
         KeyPair keyPair = EdDSAProvider.generateKeyPair()
         EdDSAPrivateKey sk = keyPair.private as EdDSAPrivateKey

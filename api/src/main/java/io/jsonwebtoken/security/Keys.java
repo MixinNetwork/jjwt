@@ -144,7 +144,7 @@ public final class Keys {
 
     public static PrivateKey privateKeyFor(SignatureAlgorithm alg) throws IllegalArgumentException {
         Assert.notNull(alg, "SignatureAlgorithm cannot be null.");
-        if (alg == SignatureAlgorithm.ED25519) {
+        if (alg == SignatureAlgorithm.EdDSA) {
             return Classes.invokeStatic(ED, "generatePrivateKey", SIG_ARG_TYPES, alg);
         }
         String msg = "The " + alg.name() + " algorithm does not support private key.";
@@ -234,7 +234,7 @@ public final class Keys {
             case ES384:
             case ES512:
                 return Classes.invokeStatic(EC, "generateKeyPair", SIG_ARG_TYPES, alg);
-            case ED25519:
+            case EdDSA:
                 return Classes.invokeStatic(ED, "generateKeyPair", SIG_ARG_TYPES, alg);
             default:
                 String msg = "The " + alg.name() + " algorithm does not support Key Pairs.";
