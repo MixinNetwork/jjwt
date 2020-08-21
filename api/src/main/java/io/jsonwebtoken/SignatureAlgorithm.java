@@ -109,7 +109,7 @@ public enum SignatureAlgorithm {
      */
     PS512("PS512", "RSASSA-PSS using SHA-512 and MGF1 with SHA-512", "RSA", "RSASSA-PSS", false, 512, 2048),
 
-    ED25519("ED25519", "EdDSA using SHA-512 (SHA-2) and Curve25519", "EdDSA", "Ed25519", false, 512, 256);
+    EdDSA("EdDSA", "EdDSA using SHA-512 (SHA-2) and Curve25519", "EdDSA", "Ed25519", false, 512, 256);
 
 
     //purposefully ordered higher to lower:
@@ -629,7 +629,7 @@ public enum SignatureAlgorithm {
         }
 
         if (key instanceof EdDSAKey) {
-            return ED25519;
+            return EdDSA;
         }
 
         // if we've made it this far in the method, the key is an ECKey due to the instanceof assertions at the
