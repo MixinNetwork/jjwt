@@ -579,9 +579,10 @@ public enum SignatureAlgorithm {
         }
 
         if (!(key instanceof SecretKey ||
-            (key instanceof PrivateKey && (key instanceof ECKey || key instanceof RSAKey)))) {
+            (key instanceof PrivateKey && (key instanceof ECKey || key instanceof RSAKey || key instanceof EdDSAKey)))) {
             String msg = "JWT standard signing algorithms require either 1) a SecretKey for HMAC-SHA algorithms or " +
-                "2) a private RSAKey for RSA algorithms or 3) a private ECKey for Elliptic Curve algorithms.  " +
+                "2) a private RSAKey for RSA algorithms or 3) a private ECKey for Elliptic Curve algorithms or " +
+                "4) a private EdDSAKey for EdDSA algorithms" +
                 "The specified key is of type " + key.getClass().getName();
             throw new InvalidKeyException(msg);
         }
