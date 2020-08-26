@@ -796,7 +796,7 @@ class JwtsTest {
 
         def claims = [iss: 'joe', exp: later(), 'http://example.com/is_root': true]
 
-        String jwt = Jwts.builder().setClaims(claims).signWith(privateKey, alg).compact()
+        String jwt = Jwts.builder().setClaims(claims).signWith(privateKey).compact()
 
         def token = Jwts.parserBuilder().setSigningKey(publicKey).build().parse(jwt)
 
