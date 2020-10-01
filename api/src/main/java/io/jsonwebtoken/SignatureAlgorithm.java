@@ -61,12 +61,12 @@ public enum SignatureAlgorithm {
     /**
      * JWA algorithm name for {@code RSASSA-PKCS-v1_5 using SHA-256}
      */
-    RS256("RS256", "RSASSA-PKCS-v1_5 using SHA-256", "RSA", "SHA256withRSA", true, 256, 2048),
+    RS256("RS256", "RSASSA-PKCS-v1_5 using SHA-256", "RSA", "SHA256withRSA", true, 256, 1024),
 
     /**
      * JWA algorithm name for {@code RSASSA-PKCS-v1_5 using SHA-384}
      */
-    RS384("RS384", "RSASSA-PKCS-v1_5 using SHA-384", "RSA", "SHA384withRSA", true, 384, 2048),
+    RS384("RS384", "RSASSA-PKCS-v1_5 using SHA-384", "RSA", "SHA384withRSA", true, 384, 1024),
 
     /**
      * JWA algorithm name for {@code RSASSA-PKCS-v1_5 using SHA-512}
